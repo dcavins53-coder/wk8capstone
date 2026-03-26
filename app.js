@@ -17,16 +17,17 @@ const chatBox = document.getElementById('chat-box');
     async function getMusicAdvice(prompt) {
       try {
         errorMsg.classList.add('hidden'); 
-        const response = await fetch(`https://api.cloudflare.com/client/v4/accounts/${accountId}/ai/run/@cf/meta/llama-3-8b-instruct`, {
+        const response = await fetch(`https://corsproxy.io/?url= https://api.cloudflare.com/client/v4/accounts/1204f49cc96cbe4e9c58ab890fa08f22/ai/run/@cf/meta/llama-3-8b-instruct`, {
           method: 'POST',
           headers: { 'Content-Type': 'application/json',Authorization:`Bearer ${cloudflarekey}` },
-          body: JSON.stringify({ message: `Suggest 3 songs for this mood: ${prompt}` })
+          body: JSON.stringify({messages:prompt})
         });
 
-        if (!response.ok) throw new Error("The AI is currently off-stage.");
+        //if (!response.ok) throw new Error("The AI is currently off-stage.");
 
-        const data = await response.json();
-        return data.reply; 
+        const data = await response.json()
+        console.log(data)
+        return data.result; 
       } catch (err) {
         errorMsg.textContent = `Error: ${err.message}`;
         errorMsg.classList.remove('hidden');
@@ -47,14 +48,13 @@ const chatBox = document.getElementById('chat-box');
       content:
         text
     },
-  ],
+  ]
       chatBox.appendChild(createMessageEl(text, true));
       userInput.value = '';
       const aiResponse = await getMusicAdvice(messages);
       if (aiResponse) {
-        chatBox.appendChild(createMessageEl(aiResponse, false));
+        chatBox.appendChild(createMessageEl(aiResponse.response,   false));
       }
-      
       chatBox.scrollTop = chatBox.scrollHeight;
     });
 
