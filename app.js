@@ -23,7 +23,7 @@ const chatBox = document.getElementById('chat-box');
           body: JSON.stringify({messages:prompt})
         });
 
-        //if (!response.ok) throw new Error("The AI is currently off-stage.");
+    
 
         const data = await response.json()
         console.log(data)
